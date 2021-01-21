@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "agriview_website", "agriview_website.csproj", "{8B59D442-DEEC-40FE-887F-4AEC4EB84DDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B59D442-DEEC-40FE-887F-4AEC4EB84DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B59D442-DEEC-40FE-887F-4AEC4EB84DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B59D442-DEEC-40FE-887F-4AEC4EB84DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B59D442-DEEC-40FE-887F-4AEC4EB84DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A1FACF0-35E3-4621-A3CF-90EB40B89E67}
+	EndGlobalSection
+EndGlobal
