@@ -67,7 +67,7 @@ import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
-    Vue.prototype.$server = "https://localhost:44319/api/news/";
+    Vue.prototype.$server = "https://localhost:44381/api/news/";
 export default {
   components: { VueEditor },
 
