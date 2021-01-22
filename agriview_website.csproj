@@ -82,13 +82,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="wwwroot\favicon.ico" />
+    <Content Include="wwwroot\img\bg-about-us-1.jpg" />
+    <Content Include="wwwroot\img\bg-contact-us-1.jpg" />
+    <Content Include="wwwroot\img\bg-default-1.jpg" />
+    <Content Include="wwwroot\index.html" />
+    <Content Include="wwwroot\js\app.js" />
+    <Content Include="wwwroot\js\chunk-vendors.js" />
     <None Include="App_Data\News.json" />
     <Content Include="App_Data\Image\address.jpg" />
     <Content Include="App_Data\Image\Chariot.jpg" />
-    <Content Include="App_Data\Image\Screen Shot 2021-01-20 at 9952.49.35 am.png" />
     <Content Include="App_Data\Image\struc.jpg" />
     <Content Include="App_Data\Image\tractor.jpg" />
     <Content Include="App_Data\Image\vege1316.png" />
+    <Content Include="ClientApp\public\favicon.ico" />
+    <Content Include="ClientApp\public\index.html" />
     <Content Include="ClientApp\src\App.vue" />
     <Content Include="ClientApp\src\assets\bg-about-us-1.jpg" />
     <Content Include="ClientApp\src\assets\bg-contact-us-1.jpg" />
@@ -105,14 +113,6 @@
     <Content Include="ClientApp\src\views\Home.vue" />
     <Content Include="ClientApp\src\views\IndustryInsight.vue" />
     <Content Include="Web.config" />
-    <Content Include="wwwroot\css\app.css" />
-    <Content Include="wwwroot\favicon.ico" />
-    <Content Include="wwwroot\img\bg-about-us-1.jpg" />
-    <Content Include="wwwroot\img\bg-contact-us-1.jpg" />
-    <Content Include="wwwroot\img\bg-default-1.jpg" />
-    <Content Include="wwwroot\index.html" />
-    <Content Include="wwwroot\js\app.js" />
-    <Content Include="wwwroot\js\chunk-vendors.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
@@ -128,8 +128,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <Content Include="wwwroot\js\app.js.map" />
-    <Content Include="wwwroot\js\chunk-vendors.js.map" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
