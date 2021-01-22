@@ -1,0 +1,33 @@
+/* general setting */
+
+a {
+  color: hsl(145, 63%, 63%);
+}
+
+a:hover, a:focus {
+  color: hsl(145, 63%, 63%);
+  background-color: #f5f5f5 !important;
+}
+
+body {
+  color: #b5b5b5;
+  background: #f2f2f2;
+  overflow-x: hidden;
+}
+
+p, li, label, input {
+  color: #333300;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 700;
+  color: hsl(0, 6%, 10%);
+}
+
+html {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+}
