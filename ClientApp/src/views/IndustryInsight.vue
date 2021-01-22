@@ -75,7 +75,7 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 
 Vue.use(VueAxios, axios);
-    Vue.prototype.$server = "https://localhost:44381/api/news/";
+Vue.prototype.$server = "https://localhost:44381/api/news/";
 export default {
   data: () => ({
     newsList: undefined,
@@ -84,10 +84,9 @@ export default {
   }),
   mounted() {
     this.loading = true;
-    axios
-      .get(this.$server)
+    axios.get(this.$server)
       .then(response => {
-        this.newsList = response.data;
+          this.newsList = response.data; console.log(this.newsList);
       })
       .catch(error => {
         this.error = true;
