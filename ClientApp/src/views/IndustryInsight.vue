@@ -75,7 +75,7 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 
 Vue.use(VueAxios, axios);
-Vue.prototype.$server = "https://localhost:44319/";
+    Vue.prototype.$server = "https://localhost:44319/api/news/";
 export default {
   data: () => ({
     newsList: undefined,
