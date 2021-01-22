@@ -153,7 +153,6 @@ export default {
         .catch(error => {
           console.error("There was an error!", error);
         });
-
       axios
         .post(`${this.$server}/image/${this.news.img}`, this.img)
         .then(response => {
