@@ -4,10 +4,7 @@
   <div class="editor">
     <h3>Upload News</h3>
     <br />
-    <!-- upload success alert -->
-    <div class="alert alert-success" v-if="uploaduccess">
-      <b>Upload successful!</b>
-    </div>
+
     <!-- upload failure alert -->
     <div class="alert alert-warning" v-if="errors.length">
       <b>Upload failed:</b>
@@ -41,6 +38,7 @@
       <div class="form-group">
         <label for="file">Cover Image</label>
         <input type="file" @change="handleImgChange" accept="image/*" />
+        <!-- image preview -->
         <img class="img" v-if="img" :src="imgUrl" />
       </div>
       <div class="form-group">
@@ -54,11 +52,14 @@
           :editor-toolbar="contentDetailToolbar"
         />
       </div>
-      <button class="btn btn-primary" v-on:click="handleOnUpload">
+      <button class="btn btn-primary " v-on:click="handleOnUpload">
         Upload
       </button>
-
     </form>
+    <!-- upload success alert -->
+    <div class="alert alert-success mt" v-if="uploaduccess">
+      <b>Upload successful!</b>
+    </div>
   </div>
 </template>
 
@@ -154,18 +155,19 @@ export default {
         });
 
       //alet upload success
-      window.scrollTo(0, 0);
       this.uploaduccess = true;
-      //reset the
+      //reset the page
       this.news = {
         id: "",
         title: "",
         date: "",
         author: "",
         img: "",
-        content: "Cover Content",
-        contentDetail: "<h4>Detail Content</h4>"
+        content: "",
+        contentDetail: ""
       };
+      this.img = undefined;
+      this.imgUrl = undefined;
     }
   }
 };
@@ -200,5 +202,10 @@ textarea {
 /* errors */
 li {
   color: #8a6d3b;
+}
+
+/* margin top */
+.mt {
+  margin-top: 1em;
 }
 </style>
