@@ -4,6 +4,11 @@
   <div class="editor">
     <h3>Upload News</h3>
     <br />
+    <!-- upload success alert -->
+    <div class="alert alert-success" v-if="uploaduccess">
+      <b>Upload successful!</b>
+    </div>
+    <!-- upload failure alert -->
     <div class="alert alert-warning" v-if="errors.length">
       <b>Upload failed:</b>
       <ul>
@@ -43,11 +48,6 @@
         <vue-editor v-model="news.content" :editor-toolbar="contentToolbar" />
       </div>
       <div class="form-group">
-        <label for="file">Detail Image</label>
-        <input type="file" @change="handleImgDetailChange" accept="image/*" />
-        <img class="img" v-if="imgDetail" :src="imgDetailUrl" />
-      </div>
-      <div class="form-group">
         <label for="contentDetail">Detail Content</label>
         <vue-editor
           v-model="news.contentDetail"
@@ -57,6 +57,7 @@
       <button class="btn btn-primary" v-on:click="handleOnUpload">
         Upload
       </button>
+
     </form>
   </div>
 </template>
@@ -88,15 +89,13 @@ export default {
       date: "",
       author: "",
       img: "",
-      imgDetail: "",
       content: "Cover Content",
       contentDetail: "<h4>Detail Content</h4>"
     },
     img: undefined,
-    imgDetail: undefined,
     imgUrl: undefined,
-    imgDetailUrl: undefined,
-    errors: []
+    errors: [],
+    uploaduccess: false
   }),
   methods: {
     //img file selection function
@@ -104,11 +103,6 @@ export default {
       this.news.img = e.target.files[0].name;
       this.img = e.target.files[0];
       this.imgUrl = URL.createObjectURL(e.target.files[0]);
-    },
-    handleImgDetailChange: function(e) {
-      this.news.imgDetail = e.target.files[0].name;
-      this.imgDetail = e.target.files[0];
-      this.imgDetailUrl = URL.createObjectURL(e.target.files[0]);
     },
     //upload function
     handleOnUpload: function(e) {
@@ -126,9 +120,6 @@ export default {
       }
       if (!this.news.img) {
         this.errors.push("Please upload cover image.");
-      }
-      if (!this.news.imgDetail) {
-        this.errors.push("Please upload detail image.");
       }
       if (!this.news.content) {
         this.errors.push("Please enter cover content.");
@@ -162,15 +153,9 @@ export default {
           console.error("There was an error!", error);
         });
 
-      axios
-        .post(`${this.$server}/image/${this.news.imgDetail}`, this.imgDetail)
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error("There was an error!", error);
-        });
-      alert("Upload successful.");
+      //alet upload success
+      window.scrollTo(0, 0);
+      this.uploaduccess = true;
       //reset the
       this.news = {
         id: "",
@@ -178,7 +163,6 @@ export default {
         date: "",
         author: "",
         img: "",
-        imgDetail: "",
         content: "Cover Content",
         contentDetail: "<h4>Detail Content</h4>"
       };
