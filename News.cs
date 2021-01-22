@@ -6,6 +6,7 @@ using System.Web;
 using Newtonsoft.Json;
 using Nancy.ModelBinding;
 using System;
+using System.Data.SQLite;
 
 namespace nancyfx
 {
@@ -36,6 +37,8 @@ namespace nancyfx
         //HTTP GET method for json file 
         private dynamic GetJson(dynamic parameters)
         {
+
+
             return File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/News.json"));
         }
 
@@ -49,6 +52,13 @@ namespace nancyfx
         //HTTP POST method for json objects
         private dynamic PostNews(dynamic parameters)
         {
+
+            string a = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
+            SQLiteConnection con = new SQLiteConnection($"Data Source = {a}");
+            con.Open();
+            SQLiteCommand cmd = new SQLiteCommand("INSERT INTO News VALUES ('a1','a2','a3','a4','a5','a6','a7')", con);
+            cmd.ExecuteNonQuery();
+            con.Close();
             //get current time
             DateTime date = DateTime.Now;
             string hour = date.Hour.ToString();
