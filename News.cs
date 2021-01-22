@@ -29,7 +29,6 @@ namespace nancyfx
             public string date { get; set; }
             public string author { get; set; }
             public string img { get; set; }
-            public string imgDetail { get; set; }
             public string content { get; set; }
             public string contentDetail { get; set; }
         }
@@ -37,9 +36,31 @@ namespace nancyfx
         //HTTP GET method for json file 
         private dynamic GetJson(dynamic parameters)
         {
+            //connect to sqlite database
+            string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
+            SQLiteConnection con = new SQLiteConnection($"Data Source = {url}");
+            con.Open();
 
+            //sql query
+            SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM News",con);
+            var data = cmd.ExecuteReader();
 
-            return File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/News.json"));
+            //return query response
+            List<News> newsList = new List<News>();
+            while (data.Read())
+            {
+                News news = new News();
+                news.id = data.GetString(0);
+                news.title = data.GetString(1);
+                news.date = data.GetString(2);
+                news.author = data.GetString(3);
+                news.img = data.GetString(4);
+                news.content = data.GetString(5);
+                news.contentDetail = data.GetString(6);
+                newsList.Add(news);
+            }
+            con.Close();
+            return newsList;
         }
 
         //HTTP GET method for images
@@ -53,36 +74,27 @@ namespace nancyfx
         private dynamic PostNews(dynamic parameters)
         {
 
-            string a = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
-            SQLiteConnection con = new SQLiteConnection($"Data Source = {a}");
-            con.Open();
-            SQLiteCommand cmd = new SQLiteCommand("INSERT INTO News VALUES ('a1','a2','a3','a4','a5','a6','a7')", con);
-            cmd.ExecuteNonQuery();
-            con.Close();
             //get current time
             DateTime date = DateTime.Now;
             string hour = date.Hour.ToString();
             string minute = date.Minute.ToString();
             //get post data
-            News newsItem = this.Bind();
+            News news = this.Bind();
             //change cover image name
-            string imgName = newsItem.img;
+            string imgName = news.img;
             string[] imgNameArray = imgName.Split('.');
             imgNameArray[0] += hour + minute;
             imgName = string.Join(".", imgNameArray);
-            newsItem.img = imgName;
-            //change detail image name
-            string imgDetailName = newsItem.imgDetail;
-            string[] imgDetailNameArray = imgDetailName.Split('.');
-            imgDetailNameArray[0] += hour + minute;
-            imgDetailName = string.Join(".", imgDetailNameArray);
-            newsItem.imgDetail = imgDetailName;
-            //append post data to News.json file
-            var newsListJson = File.ReadAllText(HttpContext.Current.Server.MapPath("~/App_Data/News.json"));
-            var newsList = JsonConvert.DeserializeObject<List<News>>(newsListJson);
-            newsList.Add(newsItem);
-            newsListJson = JsonConvert.SerializeObject(newsList, Formatting.Indented);
-            File.WriteAllText(HttpContext.Current.Server.MapPath("~/App_Data/News.json"), newsListJson);
+            news.img = imgName;
+
+            //connect to sqlite database
+            string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
+            SQLiteConnection con = new SQLiteConnection($"Data Source = {url}");
+            con.Open();
+            SQLiteCommand cmd = new SQLiteCommand($"INSERT INTO News VALUES ('{news.id}','{news.title}','{news.date}','{news.author}','{news.img}','{news.content}','{news.contentDetail}')", con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+
             return System.Net.HttpStatusCode.OK;
         }
 

@@ -106,7 +106,6 @@
     <Content Include="wwwroot\index.html" />
     <Content Include="wwwroot\js\app.js" />
     <Content Include="wwwroot\js\chunk-vendors.js" />
-    <None Include="App_Data\News.json" />
     <Content Include="App_Data\Image\address.jpg" />
     <Content Include="App_Data\Image\Chariot.jpg" />
     <Content Include="App_Data\Image\struc.jpg" />

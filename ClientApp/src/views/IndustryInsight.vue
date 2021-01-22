@@ -47,10 +47,7 @@
               <h4>{{ news.title }}</h4>
             </div>
             <div class="modal-body">
-              <img
-                class="modal-image"
-                :src="$server + 'image/' + news.imgDetail"
-              />
+              <img class="modal-image" :src="$server + 'image/' + news.img" />
               <span v-html="news.contentDetail"></span>
             </div>
             <div class="modal-footer">
@@ -84,9 +81,11 @@ export default {
   }),
   mounted() {
     this.loading = true;
-    axios.get(this.$server)
+    axios
+      .get(this.$server)
       .then(response => {
-          this.newsList = response.data; console.log(this.newsList);
+        this.newsList = response.data;
+        console.log(this.newsList);
       })
       .catch(error => {
         this.error = true;

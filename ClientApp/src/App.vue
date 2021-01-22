@@ -9,12 +9,13 @@
 <script>
 import BackToTop from "./components/BackToTop.vue";
 import Navigation from "./components/Navigation.vue";
+
 export default {
   name: "App",
   components: {
     BackToTop,
-    Navigation,
-  },
+    Navigation
+  }
 };
 </script>
 
