@@ -27,6 +27,9 @@
 
 <style scoped>
 /* contact */
+a {
+  color: hsl(145, 63%, 63%);
+}
 
 #contact {
   margin-top: 85px;

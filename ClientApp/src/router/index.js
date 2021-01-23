@@ -3,6 +3,9 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Contact from "../views/Contact.vue";
 import Editor from "../views/Editor.vue";
+
+import EditPage from "../components/Editor/EditPage.vue";
+import CreatePage from "../components/Editor/CreatePage.vue";
 import IndustryInsight from "../views/IndustryInsight.vue";
 
 Vue.use(VueRouter);
@@ -23,7 +26,19 @@ const routes = [
   {
     path: "/news/:securityKey",
     component: Editor,
-    props: true
+    props: true,
+    children: [
+      {
+        path: "/",
+        component: EditPage,
+        props: true
+      },
+      {
+        path: "create",
+        component: CreatePage,
+        props: true
+      }
+    ]
   }
 ];
 

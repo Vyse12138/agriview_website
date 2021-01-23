@@ -58,6 +58,15 @@
 
 <style scoped>
 /* navigation bar */
+a {
+  color: hsl(145, 63%, 63%);
+}
+
+a:hover,
+a:focus {
+  color: hsl(145, 63%, 63%);
+  background-color: #f5f5f5 !important;
+}
 
 #nav-container {
   box-shadow: 0 4px 4px;

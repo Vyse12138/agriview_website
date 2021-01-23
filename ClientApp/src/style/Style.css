@@ -1,13 +1,6 @@
 /* general setting */
 
-a {
-  color: hsl(145, 63%, 63%);
-}
 
-a:hover, a:focus {
-  color: hsl(145, 63%, 63%);
-  background-color: #f5f5f5 !important;
-}
 
 body {
   color: #b5b5b5;
