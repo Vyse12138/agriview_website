@@ -1,209 +1,248 @@
 <template>
-  <div v-if="securityCheck" >
-    <!-- header section -->
-    <header id="header-section">
-      <h1 id="header">Edit News</h1>
-    </header>
-    <router-link
-      :to="'/news/' + securityKey + '/create'"
-      class="btn btn-success"
-    >
-      Create
-    </router-link>
-    <!-- loading indicator -->
-    <h3 class="load" v-if="loading">Loading...</h3>
-    <h3 class="load" v-if="error">There was some error...</h3>
+  <!-- Editor page -->
 
-    <!-- news section -->
-    <div class="newsList" v-for="news in newsList" v-bind:key="news.id">
-      <!-- list of news -->
-      <div class="news-content">
-        <div class="new-img-container">
-          <img
-            class="news-img"
-            :src="$server + 'image/' + news.img"
-            alt="Placeholder"
-          />
-        </div>
-        <div class="news-text">
-          <h4>{{ news.title }}</h4>
-          <p>
-            <i class="fas fa-table"></i> {{ news.date }}
-            <i class="fas fa-pen"></i> by {{ news.author }}
-          </p>
-          <span v-html="news.content"></span>
-        </div>
-        <button class="btn btn-warning" v-on:click="handleOnEdit">
-          Edit
-        </button>
-        <button 
-          class="btn btn-danger" 
-          :id="news.img"
-          v-on:click="handleOnDelete">
-          Delete
-        </button>
+  <div class="editor" v-if="securityCheck">
+    <h3>Edit News {{id}}</h3>
+    <br />
+    <!-- upload failure alert -->
+    <div class="alert alert-warning" v-if="errors.length">
+      <b>Upload failed:</b>
+      <ul>
+        <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+      </ul>
+    </div>
+    <form>
+      <!-- title input -->
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          v-model="news.title"
+          placeholder="Title"
+        />
       </div>
+      <!-- author input -->
+      <div class="form-group">
+        <label for="author">Author</label>
+        <input
+          type="text"
+          class="form-control"
+          v-model="news.author"
+          placeholder="Author"
+        />
+      </div>
+      <!-- date input -->
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" class="form-control" v-model="news.date" />
+      </div>
+      <!-- image upload -->
+      <div class="form-group">
+        <label for="file">Cover Image</label>
+        <input type="file" @change="handleImgChange" accept="image/*" />
+        <!-- image preview -->
+        <img class="img" v-if="img" :src="imgUrl" />
+      </div>
+      <!-- cover content editor -->
+      <div class="form-group">
+        <label for="content">Cover Content</label>
+        <vue-editor v-model="news.content" :editor-toolbar="contentToolbar" />
+      </div>
+      <!-- detail content editor -->
+      <div class="form-group">
+        <label for="contentDetail">Detail Content</label>
+        <vue-editor
+          v-model="news.contentDetail"
+          :editor-toolbar="contentDetailToolbar"
+        />
+      </div>
+      <!-- upload and back button -->
+      <button class="btn btn-success " v-on:click="handleOnUpload">
+        Upload
+      </button>
+      <router-link :to="'/news/' + securityKey" class="btn btn-danger">
+        Back
+      </router-link>
+    </form>
+    <!-- upload success alert -->
+    <div class="alert alert-success mt" v-if="uploaduccess">
+      <b>Upload successful!</b>
     </div>
   </div>
 </template>
 
 <script>
+import { VueEditor } from "vue2-editor";
 import Vue from "vue";
 import axios from "axios";
 Vue.use(axios);
-Vue.prototype.$server = "https://localhost:44381/api/news/";
+Vue.prototype.$server = "https://localhost:44381/";
 export default {
+  components: { VueEditor },
   props: {
     securityKey: {
+      type: String
+    },
+    id: {
       type: String
     }
   },
   data: () => ({
-    newsList: undefined,
-    loading: false,
-    error: false,
-    securityCheck: false,
+    //customised toolbar for rich text editor
+    contentToolbar: [["bold", "italic", "underline", "strike"]],
+    contentDetailToolbar: [
+      [{ header: [false, 1, 2, 3, 4, 5, 6] }],
+      ["bold", "italic", "underline", "strike"],
+      ["blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+      [{ color: [] }, { background: [] }],
+      ["link", "clean"]
+    ],
+    //represeting news being uploaded
+    news: {
+      id: "",
+      title: "",
+      date: "2000-11-11",
+      author: "",
+      img: "",
+      content: "Cover Content",
+      contentDetail: "<h4>Detail Content</h4>"
+    },
+    //image file and link to preview
+    img: undefined,
+    imgUrl: undefined,
+    //input validation errors
+    errors: [],
+    uploaduccess: false,
+    securityCheck: false
   }),
   mounted() {
     //security check
     if (this.securityKey.match(/kyle/)) {
       this.securityCheck = true;
     }
-    //show loading indicator
-    this.loading = true;
-    //get request to render the page
+    
+   
     axios
-      .get(this.$server)
+      .get(this.$server + this.id)
       .then(response => {
-        this.newsList = response.data;
+        this.news = response.data;
+        let date = new Date();
+        this.news.date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10);
       })
       .catch(error => {
         this.error = true;
-        console.error("There was an error on getting data!", error);
-      })
-      .finally(() => {
-        this.loading = false;
+        console.error("There was an error!", error);
       });
   },
   methods: {
-    //edit function
-    handleOnEdit: function() {
-
+    //img file selection function
+    handleImgChange: function(e) {
+      this.news.img = e.target.files[0].name;
+      this.img = e.target.files[0];
+      this.imgUrl = URL.createObjectURL(e.target.files[0]);
     },
-    //delete function
-    handleOnDelete: function(e) {
-      //delete request
+    //upload function
+    handleOnUpload: function(e) {
+      e.preventDefault();
+      // input validation
+      this.errors = [];
+      if (!this.news.title) {
+        this.errors.push("Please enter title.");
+      }
+      if (!this.news.date) {
+        this.errors.push("Please enter date.");
+      }
+      if (!this.news.author) {
+        this.errors.push("Please enter author.");
+      }
+      if (!this.news.img) {
+        this.errors.push("Please upload cover image.");
+      }
+      if (!this.news.content) {
+        this.errors.push("Please enter cover content.");
+      }
+      if (!this.news.contentDetail) {
+        this.errors.push("Please enter detail content.");
+      }
+      if (this.errors.length) {
+        window.scrollTo(0, 0);
+        throw new Error("Input cannot be empty");
+      }
+      //generate id
+      this.news.id = `Post${this.news.date.replace("-", "").slice(0, 6)}_${
+        this.news.title.split(" ")[0]
+      }`;
+      //post news to server
       axios
-        .delete(`${this.$server}` + e.currentTarget.id)
+        .post(`${this.$server}`, this.news)
         .then(response => {
           console.log(response);
         })
         .catch(error => {
-          console.error("There was an error when deleting news!", error);
+          console.error("There was an error uploading news!", error);
         });
-      //get request to rerender the page
-      setTimeout(() => {
-        axios
-          .get(this.$server)
-          .then(response => {
-            this.newsList = response.data;
-          })
-          .catch(error => {
-            this.error = true;
-            console.error("There was an error!", error);
-          });
-      }, 100);
-    },
+      //post image to server
+      axios
+        .post(`${this.$server}/image/${this.news.img}`, this.img)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error("There was an error uploading image!", error);
+        });
+      //alet upload success
+      this.uploaduccess = true;
+      //reset the page
+      this.news = {
+        id: "",
+        title: "",
+        date: "",
+        author: "",
+        img: "",
+        content: "",
+        contentDetail: ""
+      };
+      this.img = undefined;
+      this.imgUrl = undefined;
+    }
   }
 };
 </script>
 
 <style scoped>
-/* header */
-#header-section {
-  margin: 34px auto 0;
-  text-align: center;
+#date {
+  color: #999;
+  line-height: normal;
 }
-#header {
-  margin: 0;
-  padding-bottom: 8px;
-  letter-spacing: -3px;
-  display: inline-block;
-  position: relative;
-}
-#header:before,
-#header:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  height: 1px;
-  width: 275%;
-  display: block;
-  background-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.795);
-}
-#header:before {
-  right: 100%;
-  margin-right: 0.5em;
-}
-#header:after {
-  left: 100%;
-  margin-left: 0.5em;
+input,
+textarea {
+  background-color: #f2f2f2;
 }
 
-@media (max-width: 767px) {
-  #industry-header {
-    font-size: 42px;
-  }
+/* upload img preview */
+.img {
+  height: 300px;
+  width: 300px;
+  margin: 10px;
+  box-shadow: 5px 5px 5px;
 }
 
-/* loading section */
-.load {
-  text-align: center;
+/* errors */
+li {
+  color: #8a6d3b;
 }
 
-/* list of news */
-.news-content {
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  box-shadow: 0 0.125em 0.275em 0 rgba(0, 0, 0, 0.125);
-  overflow: hidden;
-  float: left;
-  margin: 1.5%;
-  width: 30.3333333%;
-}
-
-.news-img {
-  width: 100%;
-  height: auto;
-}
-.news-text {
-  padding: 1.5em;
-  background-color: #fff;
-  height: 350px;
-}
-@media (max-width: 1199px) {
-  .news-content {
-    width: 46.3333333%;
-  }
-}
-
-@media (max-width: 660px) {
-  .news-content {
-    float: none;
-    width: 88%;
-    margin-bottom: 45px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .news-text {
-    height: auto;
-  }
+/* margin top */
+.mt {
+  margin-top: 1em;
 }
 
 /* buttons */
 .btn {
   width: 70px;
-  margin: 5px;
+  margin-right: 10px;
 }
 </style>

@@ -4,7 +4,6 @@
   <div class="editor" v-if="securityCheck">
     <h3>Upload News</h3>
     <br />
-
     <!-- upload failure alert -->
     <div class="alert alert-warning" v-if="errors.length">
       <b>Upload failed:</b>
@@ -121,6 +120,8 @@ export default {
     if (this.securityKey.match(/kyle/)) {
       this.securityCheck = true;
     }
+    let date = new Date();
+    this.news.date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10);
   },
   methods: {
     //img file selection function

@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Contact from "../views/Contact.vue";
 import Editor from "../views/Editor.vue";
-
+import HomePage from "../components/Editor/HomePage.vue";
 import EditPage from "../components/Editor/EditPage.vue";
 import CreatePage from "../components/Editor/CreatePage.vue";
 import IndustryInsight from "../views/IndustryInsight.vue";
@@ -30,12 +30,18 @@ const routes = [
     children: [
       {
         path: "/",
-        component: EditPage,
+        component: HomePage,
         props: true
       },
       {
         path: "create",
         component: CreatePage,
+        props: true
+      },
+      
+      {
+        path: "edit/:id",
+        component: EditPage,
         props: true
       }
     ]

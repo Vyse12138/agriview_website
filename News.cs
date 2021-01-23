@@ -15,9 +15,10 @@ namespace nancyfx
         //routers
         public API() : base("api/news")
         {
-            Get["/"] = GetNews;
+            Get["/"] = GetNewsList;
+            Get["/{id}"] = GetNews;
             Get["/image/{image}"] = GetImage;
-            Post["/"] = PostNews;
+            Post["/{id?}"] = PostNews;
             Post["/image/{image}"] = PostImage;
             Delete["/{id}"] = DeleteNews;
         }
@@ -35,7 +36,7 @@ namespace nancyfx
         }
 
         //HTTP GET method for json file 
-        private dynamic GetNews(dynamic parameters)
+        private dynamic GetNewsList(dynamic parameters)
         {
             //connect to sqlite database
             string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
@@ -62,6 +63,34 @@ namespace nancyfx
             }
             con.Close();
             return newsList;
+        }
+
+        private dynamic GetNews(dynamic parameters)
+        {
+            //connect to sqlite database
+            string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
+            SQLiteConnection con = new SQLiteConnection($"Data Source = {url}");
+            con.Open();
+
+            //sql query
+            SQLiteCommand cmd = new SQLiteCommand($"SELECT * FROM News where id='{parameters.id}'", con);
+            var data = cmd.ExecuteReader();
+
+            //return query response
+            News news = new News();
+            while (data.Read())
+            {
+                
+                news.id = data.GetString(0);
+                news.title = data.GetString(1);
+                news.date = data.GetString(2);
+                news.author = data.GetString(3);
+                news.img = data.GetString(4);
+                news.content = data.GetString(5);
+                news.contentDetail = data.GetString(6);
+            }
+            con.Close();
+            return news;
         }
 
         //HTTP GET method for images
