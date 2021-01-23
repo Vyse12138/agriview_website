@@ -85,7 +85,6 @@ export default {
       .get(this.$server)
       .then(response => {
         this.newsList = response.data;
-        console.log(this.newsList);
       })
       .catch(error => {
         this.error = true;

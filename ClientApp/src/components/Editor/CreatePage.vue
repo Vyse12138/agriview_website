@@ -2,7 +2,6 @@
   <!-- Editor page -->
 
   <div class="editor" v-if="securityCheck">
-    <router-view></router-view>
     <h3>Upload News</h3>
     <br />
 
@@ -14,6 +13,7 @@
       </ul>
     </div>
     <form>
+      <!-- title input -->
       <div class="form-group">
         <label for="title">Title</label>
         <input
@@ -23,6 +23,7 @@
           placeholder="Title"
         />
       </div>
+      <!-- author input -->
       <div class="form-group">
         <label for="author">Author</label>
         <input
@@ -32,20 +33,24 @@
           placeholder="Author"
         />
       </div>
+      <!-- date input -->
       <div class="form-group">
         <label for="date">Date</label>
         <input type="date" class="form-control" v-model="news.date" />
       </div>
+      <!-- image upload -->
       <div class="form-group">
         <label for="file">Cover Image</label>
         <input type="file" @change="handleImgChange" accept="image/*" />
         <!-- image preview -->
         <img class="img" v-if="img" :src="imgUrl" />
       </div>
+      <!-- cover content editor -->
       <div class="form-group">
         <label for="content">Cover Content</label>
         <vue-editor v-model="news.content" :editor-toolbar="contentToolbar" />
       </div>
+      <!-- detail content editor -->
       <div class="form-group">
         <label for="contentDetail">Detail Content</label>
         <vue-editor
@@ -53,13 +58,11 @@
           :editor-toolbar="contentDetailToolbar"
         />
       </div>
+      <!-- upload and back button -->
       <button class="btn btn-success " v-on:click="handleOnUpload">
         Upload
       </button>
-      <router-link
-      :to="'/news/' + securityKey"
-      class="btn btn-danger"
-      >
+      <router-link :to="'/news/' + securityKey" class="btn btn-danger">
         Back
       </router-link>
     </form>
@@ -74,8 +77,7 @@
 import { VueEditor } from "vue2-editor";
 import Vue from "vue";
 import axios from "axios";
-import VueAxios from "vue-axios";
-Vue.use(VueAxios, axios);
+Vue.use(axios);
 Vue.prototype.$server = "https://localhost:44381/";
 export default {
   components: { VueEditor },
@@ -85,6 +87,7 @@ export default {
     }
   },
   data: () => ({
+    //customised toolbar for rich text editor
     contentToolbar: [["bold", "italic", "underline", "strike"]],
     contentDetailToolbar: [
       [{ header: [false, 1, 2, 3, 4, 5, 6] }],
@@ -95,6 +98,7 @@ export default {
       [{ color: [] }, { background: [] }],
       ["link", "clean"]
     ],
+    //represeting news being uploaded
     news: {
       id: "",
       title: "",
@@ -104,13 +108,16 @@ export default {
       content: "Cover Content",
       contentDetail: "<h4>Detail Content</h4>"
     },
+    //image file and link to preview
     img: undefined,
     imgUrl: undefined,
+    //input validation errors
     errors: [],
     uploaduccess: false,
     securityCheck: false
   }),
   mounted() {
+    //security check
     if (this.securityKey.match(/kyle/)) {
       this.securityCheck = true;
     }
@@ -153,24 +160,24 @@ export default {
       this.news.id = `Post${this.news.date.replace("-", "").slice(0, 6)}_${
         this.news.title.split(" ")[0]
       }`;
-      //post to server
+      //post news to server
       axios
         .post(`${this.$server}`, this.news)
         .then(response => {
           console.log(response);
         })
         .catch(error => {
-          console.error("There was an error!", error);
+          console.error("There was an error uploading news!", error);
         });
+      //post image to server
       axios
         .post(`${this.$server}/image/${this.news.img}`, this.img)
         .then(response => {
           console.log(response);
         })
         .catch(error => {
-          console.error("There was an error!", error);
+          console.error("There was an error uploading image!", error);
         });
-
       //alet upload success
       this.uploaduccess = true;
       //reset the page

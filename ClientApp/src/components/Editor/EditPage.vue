@@ -1,5 +1,5 @@
 <template>
-  <div class="industry" v-if="securityCheck">
+  <div v-if="securityCheck" >
     <!-- header section -->
     <header id="header-section">
       <h1 id="header">Edit News</h1>
@@ -33,8 +33,15 @@
           </p>
           <span v-html="news.content"></span>
         </div>
-        <button class="btn btn-warning">Edit</button>
-        <button class="btn btn-danger">Delete</button>
+        <button class="btn btn-warning" v-on:click="handleOnEdit">
+          Edit
+        </button>
+        <button 
+          class="btn btn-danger" 
+          :id="news.id"
+          v-on:click="handleOnDelete">
+          Delete
+        </button>
       </div>
     </div>
   </div>
@@ -43,9 +50,7 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-import VueAxios from "vue-axios";
-
-Vue.use(VueAxios, axios);
+Vue.use(axios);
 Vue.prototype.$server = "https://localhost:44381/api/news/";
 export default {
   props: {
@@ -57,27 +62,58 @@ export default {
     newsList: undefined,
     loading: false,
     error: false,
-    securityCheck: false
+    securityCheck: false,
   }),
   mounted() {
+    //security check
     if (this.securityKey.match(/kyle/)) {
       this.securityCheck = true;
     }
+    //show loading indicator
     this.loading = true;
+    //get request to render the page
     axios
       .get(this.$server)
       .then(response => {
         this.newsList = response.data;
-
-        console.log(this.newsList);
       })
       .catch(error => {
         this.error = true;
-        console.error("There was an error!", error);
+        console.error("There was an error on getting data!", error);
       })
       .finally(() => {
         this.loading = false;
       });
+  },
+  methods: {
+    //edit function
+    handleOnEdit: function() {
+
+    },
+    //delete function
+    handleOnDelete: function(e) {
+      //delete request
+      axios
+        .delete(`${this.$server}` + e.currentTarget.id)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error("There was an error when deleting news!", error);
+        });
+      //get request to rerender the page
+      setTimeout(() => {
+        axios
+          .get(this.$server)
+          .then(response => {
+            this.newsList = response.data;
+          })
+          .catch(error => {
+            this.error = true;
+            console.error("There was an error!", error);
+          });
+      }, 100);
+    },
   }
 };
 </script>

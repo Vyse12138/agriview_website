@@ -19,6 +19,7 @@ namespace nancyfx
             Get["/image/{image}"] = GetImage;
             Post["/"] = PostNews;
             Post["/image/{image}"] = PostImage;
+            Delete["/{id}"] = DeleteNews;
         }
 
         //template class of news
@@ -116,6 +117,21 @@ namespace nancyfx
             {
                 img.Save(HttpContext.Current.Server.MapPath("~/App_Data/Image/" + imageName));
             }
+            return System.Net.HttpStatusCode.OK;
+        }
+
+        private dynamic DeleteNews(dynamic parameters)
+        {
+            //connect to sqlite database
+            string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
+            SQLiteConnection con = new SQLiteConnection($"Data Source = {url}");
+            con.Open();
+
+            //sql query
+            SQLiteCommand cmd = new SQLiteCommand($"DELETE FROM News WHERE id='{parameters.id}'", con);
+            cmd.ExecuteNonQuery();
+
+            con.Close();
             return System.Net.HttpStatusCode.OK;
         }
     }

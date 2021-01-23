@@ -136,6 +136,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\News.db" />
+    <Content Include="ClientApp\src\components\Editor\CreatePage.vue" />
+    <Content Include="ClientApp\src\components\Editor\EditPage.vue" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
