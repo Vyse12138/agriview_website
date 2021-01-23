@@ -15,7 +15,7 @@ namespace nancyfx
         //routers
         public API() : base("api/news")
         {
-            Get["/"] = GetJson;
+            Get["/"] = GetNews;
             Get["/image/{image}"] = GetImage;
             Post["/"] = PostNews;
             Post["/image/{image}"] = PostImage;
@@ -34,7 +34,7 @@ namespace nancyfx
         }
 
         //HTTP GET method for json file 
-        private dynamic GetJson(dynamic parameters)
+        private dynamic GetNews(dynamic parameters)
         {
             //connect to sqlite database
             string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
@@ -73,7 +73,6 @@ namespace nancyfx
         //HTTP POST method for json objects
         private dynamic PostNews(dynamic parameters)
         {
-
             //get current time
             DateTime date = DateTime.Now;
             string hour = date.Hour.ToString();
