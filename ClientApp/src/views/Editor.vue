@@ -1,7 +1,7 @@
 <template>
   <!-- Editor page -->
 
-  <div class="editor">
+  <div class="editor" v-if="securityCheck">
     <h3>Upload News</h3>
     <br />
 
@@ -72,7 +72,11 @@ Vue.use(VueAxios, axios);
 Vue.prototype.$server = "https://localhost:44381/";
 export default {
   components: { VueEditor },
-
+  props: {
+    securityKey: {
+      type: String
+    }
+  },
   data: () => ({
     contentToolbar: [["bold", "italic", "underline", "strike"]],
     contentDetailToolbar: [
@@ -96,8 +100,14 @@ export default {
     img: undefined,
     imgUrl: undefined,
     errors: [],
-    uploaduccess: false
+    uploaduccess: false,
+    securityCheck: false
   }),
+  mounted() {
+    if (this.securityKey.match(/kyle/)) {
+      this.securityCheck = true;
+    }
+  },
   methods: {
     //img file selection function
     handleImgChange: function(e) {

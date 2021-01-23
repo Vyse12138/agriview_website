@@ -8,7 +8,7 @@ namespace nancyfx
 
         public HomeModule()
         {
-            Get["/"] = _ => View["index"];
+            Get["/"] = _ => View["wwwroot/index"];
         }
 
     }

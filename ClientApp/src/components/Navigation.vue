@@ -16,7 +16,7 @@
         <ul class="nav navbar-nav">
           <li>
             <router-link
-              to="/editor"
+              to="/news/kyle"
               data-toggle="collapse"
               data-target=".navbar-collapse.in"
             >

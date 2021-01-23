@@ -10,28 +10,24 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
     component: Home
   },
   {
     path: "/contact",
-    name: "Contact",
     component: Contact
   },
   {
     path: "/industry_insight",
-    name: "Industry insight",
     component: IndustryInsight
   },
   {
-    path: "/editor",
-    name: "Editor",
-    component: Editor
+    path: "/news/:securityKey",
+    component: Editor,
+    props: true
   }
 ];
 
 const router = new VueRouter({
   routes
 });
-
 export default router;
