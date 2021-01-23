@@ -38,7 +38,7 @@
         </button>
         <button 
           class="btn btn-danger" 
-          :id="news.id"
+          :id="news.img"
           v-on:click="handleOnDelete">
           Delete
         </button>

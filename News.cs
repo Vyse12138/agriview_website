@@ -128,10 +128,10 @@ namespace nancyfx
             con.Open();
 
             //sql query
-            SQLiteCommand cmd = new SQLiteCommand($"DELETE FROM News WHERE id='{parameters.id}'", con);
+            SQLiteCommand cmd = new SQLiteCommand($"DELETE FROM News WHERE img='{parameters.id}'", con);
             cmd.ExecuteNonQuery();
-
             con.Close();
+            File.Delete(HttpContext.Current.Server.MapPath("~/App_Data/Image/" + parameters.id));
             return System.Net.HttpStatusCode.OK;
         }
     }
