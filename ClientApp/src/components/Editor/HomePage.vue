@@ -56,7 +56,8 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-Vue.use(axios);
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 //change the server link here
 Vue.prototype.$server = "https://localhost:44381/api/news/";
 export default {

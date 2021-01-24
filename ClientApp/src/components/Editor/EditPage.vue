@@ -75,7 +75,8 @@
 import { VueEditor } from "vue2-editor";
 import Vue from "vue";
 import axios from "axios";
-Vue.use(axios);
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 export default {
   components: { VueEditor },
   props: {
