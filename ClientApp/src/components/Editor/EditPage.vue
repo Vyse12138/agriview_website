@@ -174,7 +174,7 @@ export default {
         this.errors.push("Please enter author.");
       }
       if (!this.news.img) {
-        this.errors.push("Please upload cover image.");
+        this.errors.push("Please upload image.");
       }
       if (!this.news.content) {
         this.errors.push("Please enter cover content.");

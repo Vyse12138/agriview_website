@@ -1,16 +1,15 @@
 <template>
   <!-- editor page -->
   <div v-if="securityCheck">
-    <div class='title'>
-      <h3 class='header'>Editor</h3>
-
-    <!-- link to upload news page -->
-    <router-link
-      :to="'/news/' + securityKey + '/upload'"
-      class="btn btn-success upload"
-    >
-      Upload
-    </router-link>
+    <div class="title">
+      <h3 class="header">Editor</h3>
+      <!-- link to upload news page -->
+      <router-link
+        :to="'/news/' + securityKey + '/upload'"
+        class="btn btn-success upload"
+      >
+        Upload
+      </router-link>
     </div>
     <!-- loading indicator -->
     <h3 class="load" v-if="loading">Loading...</h3>
@@ -44,7 +43,7 @@
         <!-- button to delete news -->
         <button
           class="btn btn-danger"
-          :id="news.img"
+          :id="news.id"
           v-on:click="handleOnDelete"
         >
           Delete
@@ -172,18 +171,21 @@ export default {
 /* buttons */
 .btn {
   width: 70px;
-  
   margin: 5px;
 }
+
+/* title section */
 .title {
   display: flex;
 }
+
 .header {
   flex: 0 0 80%;
 }
+
 .upload {
-height: 35px;
-flex: 1;
-margin-top: 10px;
+  height: 35px;
+  flex: 1;
+  margin-top: 10px;
 }
 </style>
