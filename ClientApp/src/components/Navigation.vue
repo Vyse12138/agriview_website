@@ -16,15 +16,6 @@
         <ul class="nav navbar-nav">
           <li>
             <router-link
-              to="/news/kyle"
-              data-toggle="collapse"
-              data-target=".navbar-collapse.in"
-            >
-              EDITOR
-            </router-link>
-          </li>
-          <li>
-            <router-link
               to="/industry_insight"
               data-toggle="collapse"
               data-target=".navbar-collapse.in"
