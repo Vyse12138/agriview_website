@@ -1,7 +1,6 @@
 <template>
-  <!-- Editor page -->
-
-  <div class="editor" v-if="securityCheck">
+  <!-- upload news page -->
+  <div v-if="securityCheck">
     <h3>Upload News</h3>
     <br />
     <!-- upload failure alert -->
@@ -39,7 +38,7 @@
       </div>
       <!-- image upload -->
       <div class="form-group">
-        <label for="file">Cover Image</label>
+        <label for="file">Image</label>
         <input type="file" @change="handleImgChange" accept="image/*" />
         <!-- image preview -->
         <img class="img" v-if="img" :src="imgUrl" />
@@ -119,15 +118,17 @@ export default {
     if (this.securityKey.match(/kyle/)) {
       this.securityCheck = true;
     }
+    //change date to today
     let date = new Date();
-    this.news.date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10);
+    this.news.date = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 10);
   },
   methods: {
     //img file selection function
     handleImgChange: function(e) {
       this.news.img = e.target.files[0].name;
       this.img = e.target.files[0];
-      console.log(this.img)
       this.imgUrl = URL.createObjectURL(e.target.files[0]);
     },
     //upload function
@@ -145,7 +146,7 @@ export default {
         this.errors.push("Please enter author.");
       }
       if (!this.news.img) {
-        this.errors.push("Please upload cover image.");
+        this.errors.push("Please upload image.");
       }
       if (!this.news.content) {
         this.errors.push("Please enter cover content.");
@@ -163,7 +164,7 @@ export default {
       }`;
       //post news to server
       axios
-        .post(`${this.$server}`, this.news)
+        .post(this.$server, this.news)
         .then(response => {
           console.log(response);
         })
@@ -179,8 +180,6 @@ export default {
         .catch(error => {
           console.error("There was an error uploading image!", error);
         });
-      //alet upload success
-      this.uploaduccess = true;
       //reset the page
       this.news = {
         id: "",
@@ -193,6 +192,9 @@ export default {
       };
       this.img = undefined;
       this.imgUrl = undefined;
+
+      //alet upload success
+      this.uploaduccess = true;
     }
   }
 };

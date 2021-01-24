@@ -1,8 +1,7 @@
 <template>
-  <!-- Editor page -->
-
-  <div class="editor" v-if="securityCheck">
-    <h3>Edit News {{id}}</h3>
+  <!-- edit news page -->
+  <div v-if="securityCheck">
+    <h3>Editing News: {{ id }}</h3>
     <br />
     <!-- upload failure alert -->
     <div class="alert alert-warning" v-if="errors.length">
@@ -39,7 +38,7 @@
       </div>
       <!-- image upload -->
       <div class="form-group">
-        <label for="file">Cover Image</label>
+        <label for="file">Image</label>
         <input type="file" @change="handleImgChange" accept="image/*" />
         <!-- image preview -->
         <img class="img" v-if="img" :src="imgUrl" />
@@ -58,8 +57,8 @@
         />
       </div>
       <!-- upload and back button -->
-      <button class="btn btn-success " v-on:click="handleOnUpload">
-        Upload
+      <button class="btn btn-success" v-on:click="handleOnUpload">
+        Update
       </button>
       <router-link :to="'/news/' + securityKey" class="btn btn-danger">
         Back
@@ -67,7 +66,7 @@
     </form>
     <!-- upload success alert -->
     <div class="alert alert-success mt" v-if="uploaduccess">
-      <b>Upload successful!</b>
+      <b>Update successful!</b>
     </div>
   </div>
 </template>
@@ -130,23 +129,27 @@ export default {
         this.news = response.data;
         //change date to today
         let date = new Date();
-        this.news.date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10);
+        this.news.date = new Date(
+          date.getTime() - date.getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, 10);
       })
       .catch(error => {
         console.error("There was an error loading news!", error);
-    });
+      });
     //get image data from server
     axios
-      .get(this.$server + 'image/' + this.news.img)
+      .get(this.$server + "image/" + this.news.img)
       .then(response => {
         this.img = response;
         this.imgDefault = response;
-        console.log(this.img)
-        this.imgUrl = this.$server + 'image/' + this.news.img;
+        console.log(this.img);
+        this.imgUrl = this.$server + "image/" + this.news.img;
       })
       .catch(error => {
         console.error("There was an error loading image!", error);
-    });
+      });
     window.scrollTo(0, 0);
   },
   methods: {
@@ -193,8 +196,8 @@ export default {
         .catch(error => {
           console.error("There was an error uploading news!", error);
         });
-      //post image to server
-      if (this.img !== this.imgDefault ) {
+      //post image to server if image is changed
+      if (this.img !== this.imgDefault) {
         axios
           .post(`${this.$server}/image/${this.news.img}`, this.img)
           .then(response => {
@@ -204,9 +207,6 @@ export default {
             console.error("There was an error uploading image!", error);
           });
       }
-
-      //alet upload success
-      this.uploaduccess = true;
       //reset the page
       this.news = {
         id: "",
@@ -219,6 +219,9 @@ export default {
       };
       this.img = undefined;
       this.imgUrl = undefined;
+
+      //alet upload success
+      this.uploaduccess = true;
     }
   }
 };

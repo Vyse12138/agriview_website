@@ -1,19 +1,18 @@
 <template>
+  <!-- editor page -->
   <div v-if="securityCheck">
-    <!-- header section -->
-    <header id="header-section">
-      <h1 id="header">Edit News</h1>
-    </header>
+    <h3>Editor</h3>
+    <br />
+    <!-- link to upload news page -->
     <router-link
-      :to="'/news/' + securityKey + '/create'"
+      :to="'/news/' + securityKey + '/upload'"
       class="btn btn-success"
     >
-      Create
+      Upload
     </router-link>
     <!-- loading indicator -->
     <h3 class="load" v-if="loading">Loading...</h3>
     <h3 class="load" v-if="error">There was some error...</h3>
-
     <!-- news section -->
     <div class="newsList" v-for="news in newsList" v-bind:key="news.id">
       <!-- list of news -->
@@ -33,12 +32,14 @@
           </p>
           <span v-html="news.content"></span>
         </div>
+        <!-- link to edit news page -->
         <router-link
           class="btn btn-warning"
           :to="'/news/' + securityKey + '/edit/' + news.id"
         >
           Edit
         </router-link>
+        <!-- button to delete news -->
         <button
           class="btn btn-danger"
           :id="news.img"
@@ -55,6 +56,7 @@
 import Vue from "vue";
 import axios from "axios";
 Vue.use(axios);
+//change the server link here
 Vue.prototype.$server = "https://localhost:44381/api/news/";
 export default {
   props: {
@@ -82,10 +84,12 @@ export default {
         this.newsList = response.data;
       })
       .catch(error => {
+        //show error
         this.error = true;
         console.error("There was an error on getting data!", error);
       })
       .finally(() => {
+        //turn off loading indicator
         this.loading = false;
       });
   },
@@ -119,44 +123,6 @@ export default {
 </script>
 
 <style scoped>
-/* header */
-#header-section {
-  margin: 34px auto 0;
-  text-align: center;
-}
-#header {
-  margin: 0;
-  padding-bottom: 8px;
-  letter-spacing: -3px;
-  display: inline-block;
-  position: relative;
-}
-#header:before,
-#header:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  height: 1px;
-  width: 275%;
-  display: block;
-  background-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.795);
-}
-#header:before {
-  right: 100%;
-  margin-right: 0.5em;
-}
-#header:after {
-  left: 100%;
-  margin-left: 0.5em;
-}
-
-@media (max-width: 767px) {
-  #industry-header {
-    font-size: 42px;
-  }
-}
-
 /* loading section */
 .load {
   text-align: center;

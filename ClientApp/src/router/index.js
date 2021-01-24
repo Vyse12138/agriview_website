@@ -5,7 +5,7 @@ import Contact from "../views/Contact.vue";
 import Editor from "../views/Editor.vue";
 import HomePage from "../components/Editor/HomePage.vue";
 import EditPage from "../components/Editor/EditPage.vue";
-import CreatePage from "../components/Editor/CreatePage.vue";
+import UploadPage from "../components/Editor/UploadPage.vue";
 import IndustryInsight from "../views/IndustryInsight.vue";
 
 Vue.use(VueRouter);
@@ -34,11 +34,10 @@ const routes = [
         props: true
       },
       {
-        path: "create",
-        component: CreatePage,
+        path: "upload",
+        component: UploadPage,
         props: true
       },
-      
       {
         path: "edit/:id",
         component: EditPage,
