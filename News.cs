@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Nancy.ModelBinding;
 using System;
 using System.Data.SQLite;
+using System.Text.RegularExpressions;
 
 namespace nancyfx
 {
@@ -103,27 +104,48 @@ namespace nancyfx
         //HTTP POST method for json objects
         private dynamic PostNews(dynamic parameters)
         {
+
+            News news = this.Bind();
+
             //get current time
             DateTime date = DateTime.Now;
             string hour = date.Hour.ToString();
             string minute = date.Minute.ToString();
             //get post data
-            News news = this.Bind();
+
             //change cover image name
             string imgName = news.img;
             string[] imgNameArray = imgName.Split('.');
-            imgNameArray[0] += hour + minute;
+            if ((imgNameArray[0].Length < 4) || !(Regex.IsMatch(imgNameArray[0].Substring(imgNameArray[0].Length- 4,4), @"^\d+$")))
+            {
+
+                imgNameArray[0] += hour + minute;
+            }
             imgName = string.Join(".", imgNameArray);
             news.img = imgName;
-
             //connect to sqlite database
             string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
             SQLiteConnection con = new SQLiteConnection($"Data Source = {url}");
             con.Open();
-            SQLiteCommand cmd = new SQLiteCommand($"INSERT INTO News VALUES ('{news.id}','{news.title}','{news.date}','{news.author}','{news.img}','{news.content}','{news.contentDetail}')", con);
-            cmd.ExecuteNonQuery();
-            con.Close();
+            if (parameters.id)
+            {
+                SQLiteCommand cmd = new SQLiteCommand($"UPDATE News SET title='{news.title}', date='{news.date}', author='{news.author}', img='{news.img}', content='{news.content}', contentDetail='{news.contentDetail}' WHERE id='{parameters.id}'", con);
+                cmd.ExecuteNonQuery();
+            }
+            else
+            {
 
+
+
+
+
+
+                SQLiteCommand cmd1 = new SQLiteCommand($"INSERT INTO News VALUES ('{news.id}','{news.title}','{news.date}','{news.author}','{news.img}','{news.content}','{news.contentDetail}')", con);
+                cmd1.ExecuteNonQuery();
+                
+
+            }
+            con.Close();
             return System.Net.HttpStatusCode.OK;
         }
 
@@ -137,7 +159,11 @@ namespace nancyfx
             //rename imgage based on current time
             string imageName = parameters.image;
             string[] imageNameArray = imageName.Split('.');
-            imageNameArray[0] += hour + minute;
+            if ((imageNameArray[0].Length < 4) || !(Regex.IsMatch(imageNameArray[0].Substring(imageNameArray[0].Length - 4, 4), @"^\d+$")))
+            {
+
+                imageNameArray[0] += hour + minute;
+            }
             imageName = string.Join(".", imageNameArray);
             //get post data
             var img = Bitmap.FromStream(this.Request.Body);

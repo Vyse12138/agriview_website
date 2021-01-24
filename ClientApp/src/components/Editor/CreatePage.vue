@@ -77,7 +77,6 @@ import { VueEditor } from "vue2-editor";
 import Vue from "vue";
 import axios from "axios";
 Vue.use(axios);
-Vue.prototype.$server = "https://localhost:44381/";
 export default {
   components: { VueEditor },
   props: {
@@ -128,6 +127,7 @@ export default {
     handleImgChange: function(e) {
       this.news.img = e.target.files[0].name;
       this.img = e.target.files[0];
+      console.log(this.img)
       this.imgUrl = URL.createObjectURL(e.target.files[0]);
     },
     //upload function

@@ -77,7 +77,6 @@ import { VueEditor } from "vue2-editor";
 import Vue from "vue";
 import axios from "axios";
 Vue.use(axios);
-Vue.prototype.$server = "https://localhost:44381/";
 export default {
   components: { VueEditor },
   props: {
@@ -112,6 +111,7 @@ export default {
     },
     //image file and link to preview
     img: undefined,
+    imgDefault: undefined,
     imgUrl: undefined,
     //input validation errors
     errors: [],
@@ -123,19 +123,31 @@ export default {
     if (this.securityKey.match(/kyle/)) {
       this.securityCheck = true;
     }
-    
-   
+    //get news data from server
     axios
       .get(this.$server + this.id)
       .then(response => {
         this.news = response.data;
+        //change date to today
         let date = new Date();
         this.news.date = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0,10);
       })
       .catch(error => {
-        this.error = true;
-        console.error("There was an error!", error);
-      });
+        console.error("There was an error loading news!", error);
+    });
+    //get image data from server
+    axios
+      .get(this.$server + 'image/' + this.news.img)
+      .then(response => {
+        this.img = response;
+        this.imgDefault = response;
+        console.log(this.img)
+        this.imgUrl = this.$server + 'image/' + this.news.img;
+      })
+      .catch(error => {
+        console.error("There was an error loading image!", error);
+    });
+    window.scrollTo(0, 0);
   },
   methods: {
     //img file selection function
@@ -171,13 +183,10 @@ export default {
         window.scrollTo(0, 0);
         throw new Error("Input cannot be empty");
       }
-      //generate id
-      this.news.id = `Post${this.news.date.replace("-", "").slice(0, 6)}_${
-        this.news.title.split(" ")[0]
-      }`;
+
       //post news to server
       axios
-        .post(`${this.$server}`, this.news)
+        .post(this.$server + this.news.id, this.news)
         .then(response => {
           console.log(response);
         })
@@ -185,14 +194,17 @@ export default {
           console.error("There was an error uploading news!", error);
         });
       //post image to server
-      axios
-        .post(`${this.$server}/image/${this.news.img}`, this.img)
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error("There was an error uploading image!", error);
-        });
+      if (this.img !== this.imgDefault ) {
+        axios
+          .post(`${this.$server}/image/${this.news.img}`, this.img)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.error("There was an error uploading image!", error);
+          });
+      }
+
       //alet upload success
       this.uploaduccess = true;
       //reset the page
