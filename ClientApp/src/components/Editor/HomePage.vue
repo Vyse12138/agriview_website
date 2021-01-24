@@ -1,15 +1,17 @@
 <template>
   <!-- editor page -->
   <div v-if="securityCheck">
-    <h3>Editor</h3>
-    <br />
+    <div class='title'>
+      <h3 class='header'>Editor</h3>
+
     <!-- link to upload news page -->
     <router-link
       :to="'/news/' + securityKey + '/upload'"
-      class="btn btn-success"
+      class="btn btn-success upload"
     >
       Upload
     </router-link>
+    </div>
     <!-- loading indicator -->
     <h3 class="load" v-if="loading">Loading...</h3>
     <h3 class="load" v-if="error">There was some error...</h3>
@@ -170,6 +172,18 @@ export default {
 /* buttons */
 .btn {
   width: 70px;
+  
   margin: 5px;
+}
+.title {
+  display: flex;
+}
+.header {
+  flex: 0 0 80%;
+}
+.upload {
+height: 35px;
+flex: 1;
+margin-top: 10px;
 }
 </style>
