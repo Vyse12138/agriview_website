@@ -18,29 +18,14 @@ namespace nancyfx
             base.ApplicationStartup(container, pipelines);
             StaticConfiguration.Caching.EnableRuntimeViewUpdates = true;
             StaticConfiguration.DisableErrorTraces = false;
-
         }
-
-        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
-        {
-            base.ConfigureApplicationContainer(container);
-        }
-
         protected override void ConfigureConventions(NancyConventions nancyConventions)
         {
             base.ConfigureConventions(nancyConventions);
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("/img", "wwwroot/img"));//第一个参数为请求路径，第二个为实际文件路径
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("/css", "wwwroot/css"));
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("/js", "wwwroot/js"));
-            //nancyConventions.ViewLocationConventions.Add((viewName, model, context) => "wwwroot/" + viewName); // 任意定义视图位置
-        }
-
-        protected override void RequestStartup(TinyIoCContainer container, Nancy.Bootstrapper.IPipelines pipelines, NancyContext context)
-        {
-            base.RequestStartup(container, pipelines, context);
-            var ci = new System.Globalization.CultureInfo("en-AU");
-            //ci.DateTimeFormat.ShortDatePattern="dd/MM/yyyy";
-            Thread.CurrentThread.CurrentCulture = context.Culture = ci;
+            //nancyConventions.ViewLocationConventions.Add((viewName, model, context) => "wwwroot/" + viewName); 
         }
     }
 }

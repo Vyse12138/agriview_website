@@ -4,8 +4,6 @@ namespace nancyfx
 {
     public class HomeModule : NancyModule
     {
-        //routers
-
         public HomeModule()
         {
             Get["/"] = _ => View["wwwroot/index"];
