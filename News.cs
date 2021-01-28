@@ -108,15 +108,14 @@ namespace nancyfx
             News news = this.Bind();
 
             //get current time to encode image name 
-            DateTime date = DateTime.Now;
-            string hour = date.Hour.ToString();
-            string minute = date.Minute.ToString();
+            String date = DateTime.Now.ToString("HHmm");
+
 
             //encode image name if it is not being encoded
             string[] imgNameArray = news.img.Split('.');
             if ((imgNameArray[0].Length < 4) || !(Regex.IsMatch(imgNameArray[0].Substring(imgNameArray[0].Length- 4,4), @"^\d+$")))
             {
-                imgNameArray[0] += hour + minute;
+                imgNameArray[0] += date;
             }
             news.img = string.Join(".", imgNameArray);
 
@@ -171,16 +170,14 @@ namespace nancyfx
             var img = Bitmap.FromStream(this.Request.Body);
 
             //get current time to encode image name 
-            DateTime date = DateTime.Now;
-            string hour = date.Hour.ToString();
-            string minute = date.Minute.ToString();
+            String date = DateTime.Now.ToString("HHmm");
 
             //encode image name if it is not being encoded
             string imageName = parameters.image;
             string[] imageNameArray = imageName.Split('.');
             if ((imageNameArray[0].Length < 4) || !(Regex.IsMatch(imageNameArray[0].Substring(imageNameArray[0].Length - 4, 4), @"^\d+$")))
             {
-                imageNameArray[0] += hour + minute;
+                imageNameArray[0] += date;
             }
             imageName = string.Join(".", imageNameArray);
 

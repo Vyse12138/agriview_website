@@ -98,27 +98,30 @@ export default {
   methods: {
     //delete function
     handleOnDelete: function(e) {
-      //delete request
-      axios
-        .delete(`${this.$server}` + e.currentTarget.id)
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error("There was an error when deleting news!", error);
-        });
-      //get request to rerender the page
-      setTimeout(() => {
+      let answer = window.confirm("Are you sure you want to delete this news?");
+      if (answer) {
+        //delete request
         axios
-          .get(this.$server)
+          .delete(`${this.$server}` + e.currentTarget.id)
           .then(response => {
-            this.newsList = response.data;
+            console.log(response);
           })
           .catch(error => {
-            this.error = true;
-            console.error("There was an error!", error);
+            console.error("There was an error when deleting news!", error);
           });
-      }, 100);
+        //get request to rerender the page
+        setTimeout(() => {
+          axios
+            .get(this.$server)
+            .then(response => {
+              this.newsList = response.data;
+            })
+            .catch(error => {
+              this.error = true;
+              console.error("There was an error!", error);
+            });
+        }, 100);
+      }
     }
   }
 };

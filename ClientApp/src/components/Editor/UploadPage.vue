@@ -60,13 +60,17 @@
       <button class="btn btn-success " v-on:click="handleOnUpload">
         Upload
       </button>
-      <router-link :to="'/news/' + securityKey" class="btn btn-danger">
+      <router-link :to="'/admin/news/' + securityKey" class="btn btn-danger">
         Back
       </router-link>
     </form>
     <!-- upload success alert -->
     <div class="alert alert-success mt" v-if="uploaduccess">
-      <b>Upload successful!</b>
+      <b>
+        Upload successful!
+        <br />
+        Going back to the editor page...
+      </b>
     </div>
   </div>
 </template>
@@ -76,6 +80,7 @@ import { VueEditor } from "vue2-editor";
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import router from "../../router";
 Vue.use(VueAxios, axios);
 export default {
   components: { VueEditor },
@@ -201,6 +206,10 @@ export default {
 
       //alet upload success
       this.uploaduccess = true;
+      //go back to editor page
+      setTimeout(() => {
+        router.go(-1);
+      }, 1000);
     }
   }
 };
