@@ -164,9 +164,6 @@ export default {
       this.news.author = this.news.author.replaceAll("'", '"');
       this.news.content = this.news.content.replaceAll("'", '"');
       this.news.contentDetail = this.news.contentDetail.replaceAll("'", '"');
-
-
-      
       //generate id
       this.news.id = `Post${this.news.date.replace("-", "").slice(0, 6)}_${
         this.news.title.split(" ")[0]

@@ -24,7 +24,7 @@ const routes = [
     component: IndustryInsight
   },
   {
-    path: "/news/:securityKey",
+    path: "/admin/news/:securityKey",
     component: Editor,
     props: true,
     children: [

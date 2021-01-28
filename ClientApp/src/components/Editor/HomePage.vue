@@ -5,7 +5,7 @@
       <h3 class="header">Editor</h3>
       <!-- link to upload news page -->
       <router-link
-        :to="'/news/' + securityKey + '/upload'"
+        :to="'/admin/news/' + securityKey + '/upload'"
         class="btn btn-success upload"
       >
         Upload
@@ -36,7 +36,7 @@
         <!-- link to edit news page -->
         <router-link
           class="btn btn-warning"
-          :to="'/news/' + securityKey + '/edit/' + news.id"
+          :to="'/admin/news/' + securityKey + '/edit/' + news.id"
         >
           Edit
         </router-link>
