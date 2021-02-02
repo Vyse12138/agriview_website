@@ -70,7 +70,7 @@
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
-
+window.lastModify = new Date("December 17, 1995 03:24:00").toUTCString();
 Vue.use(VueAxios, axios);
 Vue.prototype.$server = "https://localhost:44381/api/news/";
 export default {
@@ -82,9 +82,14 @@ export default {
   mounted() {
     this.loading = true;
     axios
-      .get(this.$server)
+      .get(this.$server, {
+        headers: {
+          "If-Modified-Since": window.lastModify
+        }
+      })
       .then(response => {
         this.newsList = response.data;
+        window.lastModify = response.headers["last-modified"];
       })
       .catch(error => {
         this.error = true;

@@ -8,6 +8,9 @@ using Nancy.ModelBinding;
 using System;
 using System.Data.SQLite;
 using System.Text.RegularExpressions;
+using agriview_website;
+using System.Web.Caching;
+using System.Diagnostics;
 
 namespace nancyfx
 {
@@ -36,16 +39,29 @@ namespace nancyfx
             public string contentDetail { get; set; }
         }
 
+        public static Service1 service = new Service1();
+        public static DateTime lastmodified = DateTime.Now.ToUniversalTime();
+
         //get method for news list
         private dynamic GetNewsList(dynamic parameters)
         {
+            //calling IService to check if need to reload from server
+            //if not, return http code 304 not modified
+            if (service.DBCacgeAccess(this.Request, lastmodified))
+            {
+                return System.Net.HttpStatusCode.NotModified;
+            }
+
+            var cache = new Cache();
+            cache.Add("Key1", "Value 1", null, DateTime.Now.AddSeconds(90), Cache.NoSlidingExpiration, CacheItemPriority.High, null);
+
             //connect to sqlite database
             string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
             SQLiteConnection con = new SQLiteConnection($"Data Source = {url}");
             con.Open();
 
             //sql the select all data
-            SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM News",con);
+            SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM News", con);
             var data = cmd.ExecuteReader();
 
             //return query response
@@ -63,7 +79,12 @@ namespace nancyfx
                 newsList.Add(news);
             }
             con.Close();
-            return newsList;
+
+            
+            var response = Response.AsJson(newsList);
+            response.Headers.Add("Cache-Control", "max-age=15");
+            response.Headers.Add("Last-Modified", lastmodified.ToString("r"));
+            return response;
         }
 
         //get method for single news
@@ -113,7 +134,7 @@ namespace nancyfx
 
             //encode image name if it is not being encoded
             string[] imgNameArray = news.img.Split('.');
-            if ((imgNameArray[0].Length < 4) || !(Regex.IsMatch(imgNameArray[0].Substring(imgNameArray[0].Length- 4,4), @"^\d+$")))
+            if ((imgNameArray[0].Length < 4) || !(Regex.IsMatch(imgNameArray[0].Substring(imgNameArray[0].Length - 4, 4), @"^\d+$")))
             {
                 imgNameArray[0] += date;
             }
@@ -142,7 +163,7 @@ namespace nancyfx
 
                 //get all image names in loal file
                 DirectoryInfo d = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/App_Data/Image/"));
-                FileInfo[] images = d.GetFiles(); 
+                FileInfo[] images = d.GetFiles();
                 foreach (FileInfo image in images)
                 {
                     //delete the image that are not stored in database
@@ -160,6 +181,12 @@ namespace nancyfx
                 cmd3.ExecuteNonQuery();
             }
             con.Close();
+
+
+            var headers = this.Request.Headers.IfModifiedSince;
+
+
+            //date1 = DateTime.Now.ToUniversalTime();
             return System.Net.HttpStatusCode.OK;
         }
 

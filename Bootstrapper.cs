@@ -1,4 +1,5 @@
-﻿using Nancy;
+﻿using agriview_website;
+using Nancy;
 using Nancy.Conventions;
 using Nancy.TinyIoc;
 using System.Threading;
@@ -26,6 +27,10 @@ namespace nancyfx
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("/css", "wwwroot/css"));
             nancyConventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("/js", "wwwroot/js"));
             //nancyConventions.ViewLocationConventions.Add((viewName, model, context) => "wwwroot/" + viewName); 
+        }
+        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
+        {
+            container.Register<IService>(new Service1());
         }
     }
 }
