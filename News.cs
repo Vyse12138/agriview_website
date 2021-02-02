@@ -49,7 +49,8 @@ namespace nancyfx
             //if not, return http code 304 not modified
             if (service.DBCacgeAccess(this.Request, lastmodified))
             {
-                return System.Net.HttpStatusCode.NotModified;
+                //uncomment the line below to test
+                //return System.Net.HttpStatusCode.NotModified;
             }
 
             var cache = new Cache();
