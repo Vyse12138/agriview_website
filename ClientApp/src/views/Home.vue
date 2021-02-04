@@ -1,50 +1,30 @@
 <template>
   <!-- home page -->
   <div id="home" role="main">
-    <!-- home section 1: 'Our Business', 'Mission Statement' and 'Vision Statement' -->
-    <div id="home-section1">
-      <!-- Our Business -->
-      <div class="home-section1-item">
-        <img src="@/assets/bg-default-1.jpg" alt="Placeholder" />
-        <div class="home-section1-item-text">
-          <h4>Our Business</h4>
-          <p>
-            Agriview ,founded in 1990, is a provider of market research and
-            analysis systems to leading global, Australian and New Zealand
-            manufacturers and distributors of agricultural and construction
-            machinery and commercial grounds care equipment.
-          </p>
-        </div>
-      </div>
-
-      <!-- Mission Statement -->
-      <div class="home-section1-item">
-        <img src="@/assets/bg-about-us-1.jpg" alt="Placeholder" />
-        <div class="home-section1-item-text">
-          <h4>Mission Statement</h4>
-          <p>
-            To facilitate informed decision-making through the provision of high
-            quality, relevant, user-oriented and dynamic statistical services by
-            co-coordinating statistical activities and promoting the adherence
-            to statistical standards.
-          </p>
-        </div>
-      </div>
-
-      <!-- Vision Statement -->
-      <div class="home-section1-item item3">
-        <img src="@/assets/bg-contact-us-1.jpg" alt="Placeholder" />
-        <div class="home-section1-item-text">
-          <h4>Vision Statement</h4>
-          <p>
-            To be a leading provider of statistical information and market
-            research with a commitment to industry, learning, innovation, and
-            staff development.
-          </p>
-        </div>
-      </div>
-    </div>
-
+    <!-- post section: 'Our Business', 'Mission Statement' and 'Vision Statement' -->
+    <Post
+      title="Our Business"
+      img="bg-default-1.jpg"
+      content="Agriview, founded in 1990, is a provider of market research and
+          analysis systems to leading global, Australian and New Zealand
+          manufacturers and distributors of agricultural and construction
+          machinery and commercial grounds care equipment."
+    />
+    <Post
+      title="Mission Statement"
+      img="bg-about-us-1.jpg"
+      content="To facilitate informed decision-making through the provision of high
+          quality, relevant, user-oriented and dynamic statistical services by
+          co-coordinating statistical activities and promoting the adherence to
+          statistical standards."
+    />
+    <Post
+      title="Vision Statement"
+      img="bg-contact-us-1.jpg"
+      content="To be a leading provider of statistical information and market
+          research with a commitment to industry, learning, innovation, and
+          staff development."
+    />
     <!-- home section 2: 'Key Clients', 'Services We Offer' and 'The Machinery Sectors that we cover' -->
     <ul id="home-section2">
       <!-- Key Clients -->
@@ -186,9 +166,12 @@
 </template>
 
 <script>
+import Post from "../components/Home/Post";
 export default {
   name: "Home",
-  components: {}
+  components: {
+    Post
+  }
 };
 </script>
 
@@ -204,10 +187,6 @@ export default {
 }
 
 /* home section1*/
-
-#home-section1 {
-  padding-top: 45px;
-}
 
 .home-section1-item {
   overflow: hidden;
@@ -228,17 +207,6 @@ export default {
 
 .home-section1-item-text {
   padding: 0.5em 1.5em;
-}
-
-/* home section1 responsive design*/
-
-@media (max-width: 767px) {
-  .home-section1-item {
-    float: none;
-    width: 100%;
-    margin-bottom: 45px;
-    height: auto;
-  }
 }
 
 /* home section2*/

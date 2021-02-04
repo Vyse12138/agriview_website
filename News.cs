@@ -201,33 +201,32 @@ namespace nancyfx
             con.Open();
 
             //sql to retrieve image name based on id
-            SQLiteCommand cmd2 = new SQLiteCommand($"SELECT img FROM News WHERE id='{parameters.id}'", con);
-            var data = cmd2.ExecuteReader();
+            SQLiteCommand cmd1 = new SQLiteCommand($"SELECT img FROM News WHERE id='{parameters.id}'", con);
+            var data = cmd1.ExecuteReader();
             string imageName = "";
             while (data.Read())
             {
                 imageName = data.GetString(0);
             }
 
-          
-
             //sql to delete news based on id
-            SQLiteCommand cmd1 = new SQLiteCommand($"DELETE FROM News WHERE id='{parameters.id}'", con);
-            cmd1.ExecuteNonQuery();
+            SQLiteCommand cmd2 = new SQLiteCommand($"DELETE FROM News WHERE id='{parameters.id}'", con);
+            cmd2.ExecuteNonQuery();
 
-            //sql to count the number of news that holds this image
+            //sql to count the number of news that still holds the image
             SQLiteCommand cmd3 = new SQLiteCommand($"SELECT COUNT(id) FROM News WHERE img='{imageName}'", con);
             var count = Convert.ToInt32(cmd3.ExecuteScalar());
             Trace.WriteLine(count);
             Trace.WriteLine(123);
 
-
             con.Close();
-            //delete local image file based on id
+
+            //delete local image file based on id if no more news is hold that image
             if (count == 0)
             {
                 File.Delete(HttpContext.Current.Server.MapPath("~/App_Data/Image/" + imageName));
             }
+
             return System.Net.HttpStatusCode.OK;
         }
     }
