@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Web;
-using Newtonsoft.Json;
 using Nancy.ModelBinding;
 using System;
 using System.Data.SQLite;
 using System.Text.RegularExpressions;
-using agriview_website;
-using System.Web.Caching;
 using System.Diagnostics;
 
 namespace nancyfx
@@ -39,23 +36,9 @@ namespace nancyfx
             public string contentDetail { get; set; }
         }
 
-        public static Service1 service = new Service1();
-        public static DateTime lastmodified = DateTime.Now.ToUniversalTime();
-
         //get method for news list
         private dynamic GetNewsList(dynamic parameters)
         {
-            //calling IService to check if need to reload from server
-            //if not, return http code 304 not modified
-            if (service.DBCacgeAccess(this.Request, lastmodified))
-            {
-                //uncomment the line below to test
-                //return System.Net.HttpStatusCode.NotModified;
-            }
-
-            var cache = new Cache();
-            cache.Add("Key1", "Value 1", null, DateTime.Now.AddSeconds(90), Cache.NoSlidingExpiration, CacheItemPriority.High, null);
-
             //connect to sqlite database
             string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
             SQLiteConnection con = new SQLiteConnection($"Data Source = {url}");
@@ -79,13 +62,10 @@ namespace nancyfx
                 news.contentDetail = data.GetString(6);
                 newsList.Add(news);
             }
+
             con.Close();
 
-            
-            var response = Response.AsJson(newsList);
-            response.Headers.Add("Cache-Control", "max-age=15");
-            response.Headers.Add("Last-Modified", lastmodified.ToString("r"));
-            return response;
+            return newsList;
         }
 
         //get method for single news
@@ -131,7 +111,6 @@ namespace nancyfx
 
             //get current time to encode image name 
             String date = DateTime.Now.ToString("HHmm");
-
 
             //encode image name if it is not being encoded
             string[] imgNameArray = news.img.Split('.');
@@ -181,13 +160,9 @@ namespace nancyfx
                 SQLiteCommand cmd3 = new SQLiteCommand($"INSERT INTO News VALUES ('{news.id}','{news.title}','{news.date}','{news.author}','{news.img}','{news.content}','{news.contentDetail}')", con);
                 cmd3.ExecuteNonQuery();
             }
+
             con.Close();
 
-
-            var headers = this.Request.Headers.IfModifiedSince;
-
-
-            //date1 = DateTime.Now.ToUniversalTime();
             return System.Net.HttpStatusCode.OK;
         }
 
@@ -234,14 +209,25 @@ namespace nancyfx
                 imageName = data.GetString(0);
             }
 
+          
+
             //sql to delete news based on id
             SQLiteCommand cmd1 = new SQLiteCommand($"DELETE FROM News WHERE id='{parameters.id}'", con);
             cmd1.ExecuteNonQuery();
 
+            //sql to count the number of news that holds this image
+            SQLiteCommand cmd3 = new SQLiteCommand($"SELECT COUNT(id) FROM News WHERE img='{imageName}'", con);
+            var count = Convert.ToInt32(cmd3.ExecuteScalar());
+            Trace.WriteLine(count);
+            Trace.WriteLine(123);
+
 
             con.Close();
             //delete local image file based on id
-            File.Delete(HttpContext.Current.Server.MapPath("~/App_Data/Image/" + imageName));
+            if (count == 0)
+            {
+                File.Delete(HttpContext.Current.Server.MapPath("~/App_Data/Image/" + imageName));
+            }
             return System.Net.HttpStatusCode.OK;
         }
     }
