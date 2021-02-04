@@ -50,11 +50,14 @@ namespace nancyfx
             if (service.DBCacgeAccess(this.Request, lastmodified))
             {
                 //uncomment the line below to test
-                //return System.Net.HttpStatusCode.NotModified;
+                return System.Net.HttpStatusCode.NotModified;
+
+                var res = new Response();
+                res.StatusCode = HttpStatusCode.OK;
+                res.Headers.Add("Cache-Control", "max-age=315360000");
+                return res;
             }
 
-            var cache = new Cache();
-            cache.Add("Key1", "Value 1", null, DateTime.Now.AddSeconds(90), Cache.NoSlidingExpiration, CacheItemPriority.High, null);
 
             //connect to sqlite database
             string url = HttpContext.Current.Server.MapPath("~/App_Data/News.db");
@@ -83,7 +86,7 @@ namespace nancyfx
 
             
             var response = Response.AsJson(newsList);
-            response.Headers.Add("Cache-Control", "max-age=15");
+            response.Headers.Add("Cache-Control", "max-age=315360000");
             response.Headers.Add("Last-Modified", lastmodified.ToString("r"));
             return response;
         }
