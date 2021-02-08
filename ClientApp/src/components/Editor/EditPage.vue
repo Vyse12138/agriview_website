@@ -228,7 +228,7 @@ export default {
       //go back to editor page
       setTimeout(() => {
         router.go(-1);
-      }, 1000);
+      }, 500);
     }
   }
 };
