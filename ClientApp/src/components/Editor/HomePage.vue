@@ -14,42 +14,14 @@
     <!-- loading indicator -->
     <h3 class="load" v-if="loading">Loading...</h3>
     <h3 class="load" v-if="error">There was some error...</h3>
-    <!-- news section -->
-    <div class="newsList" v-for="news in newsList" v-bind:key="news.id">
-      <!-- list of news -->
-      <div class="news-content">
-        <div class="new-img-container">
-          <img
-            class="news-img"
-            :src="$server + 'image/' + news.img"
-            alt="Placeholder"
-          />
-        </div>
-        <div class="news-text">
-          <h4>{{ news.title }}</h4>
-          <p>
-            <i class="fas fa-table"></i> {{ news.date }}
-            <i class="fas fa-pen"></i> by {{ news.author }}
-          </p>
-          <span v-html="news.content"></span>
-        </div>
-        <!-- link to edit news page -->
-        <router-link
-          class="btn btn-warning"
-          :to="'/admin/news/' + securityKey + '/edit/' + news.id"
-        >
-          Edit
-        </router-link>
-        <!-- button to delete news -->
-        <button
-          class="btn btn-danger"
-          :id="news.id"
-          v-on:click="handleOnDelete"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
+
+    <News
+      v-for="news in newsList"
+      v-bind:key="news.id"
+      :news="news"
+      :securityKey="securityKey"
+      @onDelete="handleOnDelete"
+    />
   </div>
 </template>
 
@@ -57,10 +29,16 @@
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import News from "@/components/Editor/News.vue";
+
 Vue.use(VueAxios, axios);
 //change the server link here
 Vue.prototype.$server = "https://localhost:44381/api/news/";
 export default {
+  name: "HomePage",
+  components: {
+    News
+  },
   props: {
     securityKey: {
       type: String
@@ -97,12 +75,12 @@ export default {
   },
   methods: {
     //delete function
-    handleOnDelete: function(e) {
+    handleOnDelete: function(id) {
       let answer = window.confirm("Are you sure you want to delete this news?");
       if (answer) {
         //delete request
         axios
-          .delete(`${this.$server}` + e.currentTarget.id)
+          .delete(`${this.$server}` + id)
           .then(response => {
             console.log(response);
           })
@@ -117,7 +95,6 @@ export default {
               this.newsList = response.data;
             })
             .catch(error => {
-              this.error = true;
               console.error("There was an error!", error);
             });
         }, 100);
@@ -131,45 +108,6 @@ export default {
 /* loading section */
 .load {
   text-align: center;
-}
-
-/* list of news */
-.news-content {
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  box-shadow: 0 0.125em 0.275em 0 rgba(0, 0, 0, 0.125);
-  overflow: hidden;
-  float: left;
-  margin: 1.5%;
-  width: 30.3333333%;
-}
-
-.news-img {
-  width: 100%;
-  height: auto;
-}
-.news-text {
-  padding: 1.5em;
-  background-color: #fff;
-  height: 350px;
-}
-@media (max-width: 1199px) {
-  .news-content {
-    width: 46.3333333%;
-  }
-}
-
-@media (max-width: 660px) {
-  .news-content {
-    float: none;
-    width: 88%;
-    margin-bottom: 45px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .news-text {
-    height: auto;
-  }
 }
 
 /* buttons */
