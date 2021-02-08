@@ -107,8 +107,7 @@ export default {
       date: "",
       author: "",
       img: "",
-      content: "",
-      contentDetail: "<p>Content</p>"
+      contentDetail: "<h4>Content</h4>"
     },
     //image file and link to preview
     img: undefined,

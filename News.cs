@@ -32,7 +32,6 @@ namespace nancyfx
             public string date { get; set; }
             public string author { get; set; }
             public string img { get; set; }
-            public string content { get; set; }
             public string contentDetail { get; set; }
         }
 
@@ -58,8 +57,7 @@ namespace nancyfx
                 news.date = data.GetString(2);
                 news.author = data.GetString(3);
                 news.img = data.GetString(4);
-                news.content = data.GetString(5);
-                news.contentDetail = data.GetString(6);
+                news.contentDetail = data.GetString(5);
                 newsList.Add(news);
             }
 
@@ -89,8 +87,7 @@ namespace nancyfx
                 news.date = data.GetString(2);
                 news.author = data.GetString(3);
                 news.img = data.GetString(4);
-                news.content = data.GetString(5);
-                news.contentDetail = data.GetString(6);
+                news.contentDetail = data.GetString(5);
             }
             con.Close();
             return news;
@@ -129,7 +126,7 @@ namespace nancyfx
             if (parameters.id)
             {
                 //sql to update news based on id
-                SQLiteCommand cmd1 = new SQLiteCommand($"UPDATE News SET title='{news.title}', date='{news.date}', author='{news.author}', img='{news.img}', content='{news.content}', contentDetail='{news.contentDetail}' WHERE id='{parameters.id}'", con);
+                SQLiteCommand cmd1 = new SQLiteCommand($"UPDATE News SET title='{news.title}', date='{news.date}', author='{news.author}', img='{news.img}', contentDetail='{news.contentDetail}' WHERE id='{parameters.id}'", con);
                 cmd1.ExecuteNonQuery();
 
                 //get all image names store in database
@@ -157,7 +154,7 @@ namespace nancyfx
             else
             {
                 //sql to insert news 
-                SQLiteCommand cmd3 = new SQLiteCommand($"INSERT INTO News VALUES ('{news.id}','{news.title}','{news.date}','{news.author}','{news.img}','{news.content}','{news.contentDetail}')", con);
+                SQLiteCommand cmd3 = new SQLiteCommand($"INSERT INTO News VALUES ('{news.id}','{news.title}','{news.date}','{news.author}','{news.img}','{news.contentDetail}')", con);
                 cmd3.ExecuteNonQuery();
             }
 

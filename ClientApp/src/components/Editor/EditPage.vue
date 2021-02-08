@@ -108,7 +108,6 @@ export default {
       date: "2000-11-11",
       author: "",
       img: "",
-      content: "",
       contentDetail: "<h4>Content</h4>"
     },
     //image file and link to preview

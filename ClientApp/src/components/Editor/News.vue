@@ -59,10 +59,8 @@ export default {
   methods: {
     //delete function
     handleOnDelete: function() {
-
       this.$emit("onDelete", this.news.id);
     }
-
   }
 };
 </script>
@@ -73,7 +71,6 @@ export default {
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   box-shadow: 0 0.125em 0.275em 0 rgba(0, 0, 0, 0.125);
-  overflow: hidden;
   float: left;
   margin: 1.5%;
   width: 30.3333333%;
@@ -87,6 +84,7 @@ export default {
   padding: 1.5em;
   color: black;
   background-color: #fff;
+  overflow: hidden;
   height: 350px;
 }
 @media (max-width: 1199px) {
