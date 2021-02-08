@@ -7,6 +7,7 @@ import HomePage from "../components/Editor/HomePage.vue";
 import EditPage from "../components/Editor/EditPage.vue";
 import UploadPage from "../components/Editor/UploadPage.vue";
 import IndustryInsight from "../views/IndustryInsight.vue";
+import ErrorPage from "../views/ErrorPage.vue";
 
 Vue.use(VueRouter);
 
@@ -44,6 +45,10 @@ const routes = [
         props: true
       }
     ]
+  },
+  {
+    path: "*",
+    component: ErrorPage
   }
 ];
 
