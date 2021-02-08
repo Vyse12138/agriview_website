@@ -21,6 +21,7 @@
           placeholder="Title"
         />
       </div>
+
       <!-- author input -->
       <div class="form-group">
         <label for="author">Author</label>
@@ -31,11 +32,13 @@
           placeholder="Author"
         />
       </div>
+
       <!-- date input -->
       <div class="form-group">
         <label for="date">Date</label>
         <input type="date" class="form-control" v-model="news.date" />
       </div>
+
       <!-- image upload -->
       <div class="form-group">
         <label for="file">Image</label>
@@ -43,19 +46,16 @@
         <!-- image preview -->
         <img class="img" v-if="img" :src="imgUrl" />
       </div>
-      <!-- cover content editor -->
-      <div class="form-group">
-        <label for="content">Cover Content</label>
-        <vue-editor v-model="news.content" :editor-toolbar="contentToolbar" />
-      </div>
+
       <!-- detail content editor -->
       <div class="form-group">
-        <label for="contentDetail">Detail Content</label>
+        <label for="contentDetail">Content</label>
         <vue-editor
           v-model="news.contentDetail"
           :editor-toolbar="contentDetailToolbar"
         />
       </div>
+
       <!-- upload and back button -->
       <button class="btn btn-success " v-on:click="handleOnUpload">
         Upload
@@ -91,7 +91,6 @@ export default {
   },
   data: () => ({
     //customised toolbar for rich text editor
-    contentToolbar: [["bold", "italic", "underline", "strike"]],
     contentDetailToolbar: [
       [{ header: [false, 1, 2, 3, 4, 5, 6] }],
       ["bold", "italic", "underline", "strike"],
@@ -108,8 +107,8 @@ export default {
       date: "",
       author: "",
       img: "",
-      content: "Cover Content",
-      contentDetail: "<h4>Detail Content</h4>"
+      content: "",
+      contentDetail: "<p>Content</p>"
     },
     //image file and link to preview
     img: undefined,
@@ -154,11 +153,8 @@ export default {
       if (!this.news.img) {
         this.errors.push("Please upload image.");
       }
-      if (!this.news.content) {
-        this.errors.push("Please enter cover content.");
-      }
       if (!this.news.contentDetail) {
-        this.errors.push("Please enter detail content.");
+        this.errors.push("Please enter content.");
       }
       if (this.errors.length) {
         window.scrollTo(0, 0);
@@ -167,7 +163,6 @@ export default {
       //change ' to '' so it  won't affect sql
       this.news.title = this.news.title.replaceAll("'", '"');
       this.news.author = this.news.author.replaceAll("'", '"');
-      this.news.content = this.news.content.replaceAll("'", '"');
       this.news.contentDetail = this.news.contentDetail.replaceAll("'", '"');
       //generate id
       this.news.id = `Post${this.news.date.replace("-", "").slice(0, 6)}_${
